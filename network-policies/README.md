@@ -16,6 +16,6 @@ https://pauldally.medium.com/debugging-networkpolicy-part-3-83658d26747e
 
 # Procedure
 
-- [] Always create a namespace to insert your application. Don't use the default namespace as best practice
-- [] Create a deny-all-expect-DNS for all namespaces you create
-- [] Create the necessary ingress and egress network policies as your application requires
+- [ ] Always create a namespace to insert your application. Don't use the default namespace as best practice
+- [ ] Create a deny-all-expect-DNS for all namespaces you create
+- [ ] Create the necessary ingress and egress network policies as your application requires
