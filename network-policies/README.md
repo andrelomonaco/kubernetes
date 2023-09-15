@@ -18,9 +18,9 @@ https://pauldally.medium.com/debugging-networkpolicy-part-3-83658d26747e
 
 - [ ] Always create a namespace to insert your application. Don't use the default namespace as best practice
 
-kubectl create -f 
+kubectl create -f https://raw.githubusercontent.com/andrelomonaco/SpringBoot/main/Namespace.yaml
 
-- [ ] Create a deny-all-expect-DNS for all namespaces you create
+- [ ] Create a deny-all-expect-DNS for all namespaces you create. In this example springboot namespace
 
 kubectl create -f https://raw.githubusercontent.com/andrelomonaco/kubernetes/main/network-policies/default-deny-allow-dns.yaml
     
