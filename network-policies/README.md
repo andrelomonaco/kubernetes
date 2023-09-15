@@ -25,3 +25,5 @@ kubectl create -f https://raw.githubusercontent.com/andrelomonaco/SpringBoot/mai
 kubectl create -f https://raw.githubusercontent.com/andrelomonaco/kubernetes/main/network-policies/default-deny-allow-dns.yaml
     
 - [ ] Create the necessary ingress and egress network policies as your application requires
+
+kubectl create -f https://raw.githubusercontent.com/andrelomonaco/kubernetes/main/network-policies/allow-frontend.yaml
