@@ -17,5 +17,11 @@ https://pauldally.medium.com/debugging-networkpolicy-part-3-83658d26747e
 # Procedure
 
 - [ ] Always create a namespace to insert your application. Don't use the default namespace as best practice
+
+kubectl create -f 
+
 - [ ] Create a deny-all-expect-DNS for all namespaces you create
+
+kubectl create -f https://raw.githubusercontent.com/andrelomonaco/kubernetes/main/network-policies/default-deny-allow-dns.yaml
+    
 - [ ] Create the necessary ingress and egress network policies as your application requires
