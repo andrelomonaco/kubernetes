@@ -15,38 +15,38 @@ Disk	      40 GB
 
 sudo touch /etc/cloud/cloud-init.disabled
 
-sudo su
-apt update && sudo apt -y full-upgrade
-apt install apt-transport-https ca-certificates curl software-properties-common
+sudo apt update && sudo apt -y full-upgrade
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
 # B) Install Docker
 # See this article for avoid apt-key
 # https://linuxuniverse.com.br/linux/trusted
 # Resume Article
-
-if your existing use of apt-key add looks like this:
-
-wget -qO- https://myrepo.example/myrepo.asc | sudo apt-key add –
-
-Then you can directly replace this with (though note the recommendation
-below):
-
-wget -qO- https://myrepo.example/myrepo.asc | sudo tee
-/etc/apt/trusted.gpg.d/myrepo.asc
-
-Make sure to use the “asc” extension for ASCII armored keys and the
-“gpg” extension for the binary OpenPGP format (also known as “GPG key
-public ring”). The binary OpenPGP format works for all apt versions,
-while the ASCII armored format works for apt version >= 1.4.
-
+#
+# if your existing use of apt-key add looks like this:
+#
+# wget -qO- https://myrepo.example/myrepo.asc | sudo apt-key add –
+#
+# Then you can directly replace this with (though note the recommendation
+# below):
+#
+# wget -qO- https://myrepo.example/myrepo.asc | sudo tee
+# /etc/apt/trusted.gpg.d/myrepo.asc
+#
+# Make sure to use the “asc” extension for ASCII armored keys and the
+# “gpg” extension for the binary OpenPGP format (also known as “GPG key
+# public ring”). The binary OpenPGP format works for all apt versions,
+# while the ASCII armored format works for apt version >= 1.4.
+#
 # End Resume Article
 
 sudo apt-get install curl apt-transport-https ca-certificates software-properties-common -y
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee
-/etc/apt/trusted.gpg.d/download-docker.gpg
+sudo wget -qO - https://download.docker.com/linux/ubuntu/gpg |
+  sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/download-docker.gpg --import -
 
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
 sudo apt update -y
 apt-cache policy docker-ce
 sudo apt install docker-ce -y
@@ -57,8 +57,8 @@ sudo systemctl start docker.service
 
 # C) Download Harbor
 
-wget https://github.com/goharbor/harbor/releases/download/v2.9.0/harbor-online-installer-v2.9.0.tgz
-tar xvf harbor-online-installer-v2.9.0.tgz
+wget https://github.com/goharbor/harbor/releases/download/v2.14.0/harbor-online-installer-v2.14.0.tgz
+tar xvf harbor-online-installer-v2.14.0.tgz
 cd harbor
 ls -al
 
@@ -71,7 +71,7 @@ After this, you will have certificates at /etc/letsencrypt/live/harbor.xyberneti
 mkdir -p certs
  openssl req \
    -newkey rsa:4096 -nodes -sha256 -keyout certs/harbor.key \
-   -addext "subjectAltName = DNS:harbor.xybernetics.com" \
+   -addext "subjectAltName = DNS:harbor.site.com" \
    -x509 -days 365 -out certs/harbor.crt
 
  sudo cp certs/harbor.* /etc/ssl/certs/
