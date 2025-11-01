@@ -10,6 +10,11 @@ Disk	      40 GB
 
 # A) Prerequisites installation
 
+# cloud-init is a tool for automatically initializing and customizing an instance of a Linux distribution.
+# Create an empty file to prevent the service from starting  
+
+sudo touch /etc/cloud/cloud-init.disabled
+
 sudo su
 apt update && sudo apt -y full-upgrade
 apt install apt-transport-https ca-certificates curl software-properties-common
