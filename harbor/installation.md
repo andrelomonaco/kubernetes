@@ -1,1 +1,110 @@
+Minimal Recommended Harbor Server
+
+Resource	  Minimum	Recommended
+CPU	        2 CPU
+Mem	        4 GB
+Disk	      40 GB
+
+# Based on this article with some little changes
+# https://arefinrumi.hashnode.dev/install-harbor-docker-image-registry-on-ubuntu-2204
+
+# A) Prerequisites installation
+
+sudo su
+apt update && sudo apt -y full-upgrade
+apt install apt-transport-https ca-certificates curl software-properties-common
+
+# B) Install Docker
+# See this article for avoid apt-key
+# https://linuxuniverse.com.br/linux/trusted
+# Resume Article
+
+if your existing use of apt-key add looks like this:
+
+wget -qO- https://myrepo.example/myrepo.asc | sudo apt-key add –
+
+Then you can directly replace this with (though note the recommendation
+below):
+
+wget -qO- https://myrepo.example/myrepo.asc | sudo tee
+/etc/apt/trusted.gpg.d/myrepo.asc
+
+Make sure to use the “asc” extension for ASCII armored keys and the
+“gpg” extension for the binary OpenPGP format (also known as “GPG key
+public ring”). The binary OpenPGP format works for all apt versions,
+while the ASCII armored format works for apt version >= 1.4.
+
+# End Resume Article
+
+sudo apt-get install curl apt-transport-https ca-certificates software-properties-common -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee
+/etc/apt/trusted.gpg.d/download-docker.gpg
+
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update -y
+apt-cache policy docker-ce
+sudo apt install docker-ce -y
+sudo systemctl enable docker
+sudo systemctl status docker
+sudo apt install docker-compose -y
+sudo systemctl start docker.service
+
+# C) Download Harbor
+
+wget https://github.com/goharbor/harbor/releases/download/v2.9.0/harbor-online-installer-v2.9.0.tgz
+tar xvf harbor-online-installer-v2.9.0.tgz
+cd harbor
+ls -al
+
+# D) Configure Harbor with HTTPS
+
+sudo apt install certbot -y
+sudo certbot certonly --standalone -d "harbor.xybernetics.com" --preferred-challenges http --agree-tos -n -m "rabi@xybernetics.com" --keep-until-expiring
+After this, you will have certificates at /etc/letsencrypt/live/harbor.xybernetics.com/
+
+mkdir -p certs
+ openssl req \
+   -newkey rsa:4096 -nodes -sha256 -keyout certs/harbor.key \
+   -addext "subjectAltName = DNS:harbor.xybernetics.com" \
+   -x509 -days 365 -out certs/harbor.crt
+
+ sudo cp certs/harbor.* /etc/ssl/certs/
+
+# E) Edit harbor.yml.tmpl and save as harbor.yml
+
+"hostname"
+"harbor_admin_password"
+"database" paramters.
+https
+Comment out https if you are not using it.
+If you are using https, this is what it should look like.
+    https:
+      https port for harbor, default is 443
+      port: 443
+      The path of cert and key files for nginx
+      certificate: /etc/ssl/certs/harbor.crt
+      private_key: /etc/ssl/certs/harbor.key
+
+# F) Install Harbor with Trivy
+
+sudo ./install.sh --with-trivy
+sudo docker image ls
+sudo docker container ls
+
+# G) Test Harbor access
+
+http://IP_ADDRESS
+OR
+https://IP_ADDRESS
+
+Default credentials
+Username: admin
+Password: Harbor12345
+
+
+
+
+
+
 
