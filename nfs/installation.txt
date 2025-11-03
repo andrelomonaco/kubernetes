@@ -19,3 +19,39 @@ sudo touch /etc/cloud/cloud-init.disabled
 
 sudo apt update && sudo apt -y full-upgrade
 sudo reboot
+
+# Step 1: Installing the NFS Server
+
+sudo apt-get update
+sudo apt-get install nfs-common nfs-kernel-server -y
+
+# Create a directory to export:
+
+sudo mkdir -p /data/nfs
+sudo chown nobody:nogroup /data/nfs
+sudo chmod 2770 /data/nfs
+
+# Applying chmod 2770 to a directory that is being exported as an NFS share ensures that:
+
+Group Collaboration: All files and subdirectories created within that share will automatically
+belong to the same group as the share itself, facilitating group collaboration.
+
+Controlled Access: Only the owner and the defined group have full access (read, write, execute), 
+while "others" have no access, providing a level of security.
+
+# Export directory
+# Replace NETWORK
+
+echo -e "/data/nfs\t10.124.0.0/24(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
+sudo exportfs -av
+
+and restart NFS service:
+
+# Restart and show logs
+sudo systemctl restart nfs-kernel-server
+sudo systemctl status nfs-kernel-server
+
+
+
+
+
