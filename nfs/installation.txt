@@ -1,1 +1,21 @@
 
+Minimal Recommended Harbor Server
+
+Resource	  Minimum	Recommended
+CPU	        2 CPU
+Mem	        8 GB
+Disk	      60 GB
+Disk without LVM
+
+# Based on this article with some little changes
+https://hbayraktar.medium.com/how-to-setup-dynamic-nfs-provisioning-in-a-kubernetes-cluster-cbf433b7de29
+
+# A) Prerequisites installation
+
+# cloud-init is a tool for automatically initializing and customizing an instance of a Linux distribution.
+# Create an empty file to prevent the service from starting  
+
+sudo touch /etc/cloud/cloud-init.disabled
+
+sudo apt update && sudo apt -y full-upgrade
+sudo reboot
