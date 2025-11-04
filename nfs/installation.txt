@@ -59,10 +59,10 @@ MY_IP= ip -4 addr show scope global | awk '$1 == "inet" {print $2}'
 
 # Enable Firewall
 
+sudo ufw allow 22/tcp
 sudo ufw allow from 192.168.254.0/24 to any port nfs
 sudo ufw --force enable
 sudo ufw status
-
 
 Step 2: Install NFS client packages on K8s Nodes
 Make sure all your Kubernetes nodes have the NFS client packages installed. On Ubuntu-based nodes, install nfs-common:
@@ -109,7 +109,7 @@ kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-e
 
 # Delete the test resources
 
-$ kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-claim.yaml -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-pod.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-claim.yaml -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-pod.yaml
 
 
 
