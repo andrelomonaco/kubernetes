@@ -42,14 +42,48 @@ while "others" have no access, providing a level of security.
 # Export directory
 # Replace NETWORK
 
-echo -e "/data/nfs\t10.124.0.0/24(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
+export NETWORK=192.168.254.0/24
+
+echo -e "/data/nfs\t${NETWORK}(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
 sudo exportfs -av
 
-and restart NFS service:
+# Restart NFS service:
 
-# Restart and show logs
 sudo systemctl restart nfs-kernel-server
 sudo systemctl status nfs-kernel-server
+
+# Show Export Details:
+
+MY_IP= ip -4 addr show scope global | awk '$1 == "inet" {print $2}'
+/sbin/showmount -e ${MY_IP}
+
+Step 2: Install NFS client packages on K8s Nodes
+Make sure all your Kubernetes nodes have the NFS client packages installed. On Ubuntu-based nodes, install nfs-common:
+
+sudo apt update
+sudo apt install nfs-common -y
+
+Step 3: Install and Configure NFS Client Provisioner
+Deploy the NFS Subdir External Provisioner in your Kubernetes cluster to automate the creation and management 
+of NFS-backed Persistent Volumes (PVs) and Persistent Volume Claims (PVCs).
+
+Add Helm Repository for nfs-subdir-external-provisioner:
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+
+Install Helm Chart for NFS
+
+export NFS_SERVER_IP=192.168.254.227
+
+helm install nfs-subdir-external-provisioner \
+nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+--set nfs.server=${NFS_SERVER_IP} \
+--set nfs.path=/data/nfs \
+--set storageClass.onDelete=true
+
+
+
+
+
 
 
 
