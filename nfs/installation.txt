@@ -111,6 +111,13 @@ kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-e
 
 kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-claim.yaml -f https://raw.githubusercontent.com/kubernetes-sigs/nfs-subdir-external-provisioner/master/deploy/test-pod.yaml
 
+# Make the nfs-client storageclass default
+
+kubectl get storageclass
+kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl get storageclass
+
+
 
 
 
