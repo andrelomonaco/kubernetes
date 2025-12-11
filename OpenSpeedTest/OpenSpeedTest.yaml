@@ -19,7 +19,7 @@ spec:
         app: openspeedtest
     spec:
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
       containers:
       - name: openspeedtest
         image: openspeedtest/latest:latest
