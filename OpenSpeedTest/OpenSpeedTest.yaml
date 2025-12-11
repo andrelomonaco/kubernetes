@@ -18,18 +18,17 @@ spec:
       labels:
         app: openspeedtest
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
-        - name: openspeedtest
-          image: openspeedtest/latest:latest
-        imagePullSecrets:
-        - name: regcred
+      - name: openspeedtest
+        image: openspeedtest/latest:latest
           resources:
             limits:
               memory: "128Mi"
               cpu: "500m"
           ports:
             - containerPort: 3000
-
 ---
 
 apiVersion: v1
