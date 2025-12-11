@@ -21,8 +21,8 @@ spec:
       containers:
         - name: openspeedtest
           image: openspeedtest/latest:latest
-          imagePullSecrets:
-          - name: regcred
+        imagePullSecrets:
+        - name: regcred
           resources:
             limits:
               memory: "128Mi"
